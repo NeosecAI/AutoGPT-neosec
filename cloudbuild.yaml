@@ -1,4 +1,10 @@
 steps:
+  - name: 'gcr.io/cloud-builders/git'
+    args:
+      - clone
+      - 'https://github.com/NeosecAI/AutoGPT-neosec.git'
+      - 'AutoGPT-neosec'
+    dir: /workspace
   - name: gcr.io/cloud-builders/gcloud
     args:
       - '-c'
