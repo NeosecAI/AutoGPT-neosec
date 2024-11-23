@@ -1,0 +1,52 @@
+steps:
+  - name: gcr.io/cloud-builders/git
+    args:
+      - clone
+      - 'https://github.com/Significant-Gravitas/AutoGPT.git'
+    dir: /workspace
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - '-c'
+      - >
+        cd /workspace/AutoGPT && 
+
+        git submodule update --init --recursive &&
+
+        cd autogpt_platform &&
+
+        sed -i 's/GOTRUE_MAILER_AUTOCONFIRM: true/GOTRUE_MAILER_AUTOCONFIRM:
+        "true"/g' docker-compose.yml &&
+
+        cp supabase/docker/.env.example .env 
+    entrypoint: bash
+  - name: 'us-central1-docker.pkg.dev/vratant-test-prj/auto-gpt/docker-compose:latest'
+    args:
+      - '-c'
+      - >
+        docker compose -f /workspace/AutoGPT/autogpt_platform/docker-compose-copy.yml
+        build
+    entrypoint: bash
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - '-c'
+      - |
+        cd /workspace/AutoGPT/autogpt_platform &&
+        for image in autogpt_platform-executor \
+                      autogpt_platform-frontend \
+                      autogpt_platform-market \
+                      autogpt_platform-market-migrations \
+                      autogpt_platform-migrate \
+                      autogpt_platform-rest_server \
+                      autogpt_platform-websocket_server; do
+          # Tag the image with the Artifact Registry location
+          target_image="us-central1-docker.pkg.dev/vratant-test-prj/auto-gpt/$image:latest"
+          docker tag $image $target_image
+          # Push the image to Artifact Registry
+          docker push $target_image
+        done
+    entrypoint: bash
+timeout: 1200s
+options:
+  logging: CLOUD_LOGGING_ONLY
+substitutions:
+  _YOUR_ENV_VAR: value
