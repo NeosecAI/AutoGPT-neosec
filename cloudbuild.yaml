@@ -27,7 +27,7 @@ steps:
         docker compose -f /workspace/${_REPO_NAME}/autogpt_platform/docker-compose-copy.yml
         build
     entrypoint: bash
-  - name: gcr.io/cloud-builders/gcloud
+  - name: gcr.io/cloud-builders/docker
     args:
       - '-c'
       - |
