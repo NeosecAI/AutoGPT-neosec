@@ -1,14 +1,9 @@
 steps:
-  - name: gcr.io/cloud-builders/git
-    args:
-      - clone
-      - 'https://github.com/Significant-Gravitas/AutoGPT.git'
-    dir: /workspace
   - name: gcr.io/cloud-builders/gcloud
     args:
       - '-c'
       - >
-        cd /workspace/AutoGPT && 
+        cd /workspace/${_REPO_NAME} && 
 
         git submodule update --init --recursive &&
 
@@ -23,14 +18,14 @@ steps:
     args:
       - '-c'
       - >
-        docker compose -f /workspace/AutoGPT/autogpt_platform/docker-compose-copy.yml
+        docker compose -f /workspace/${_REPO_NAME}/autogpt_platform/docker-compose-copy.yml
         build
     entrypoint: bash
   - name: gcr.io/cloud-builders/gcloud
     args:
       - '-c'
       - |
-        cd /workspace/AutoGPT/autogpt_platform &&
+        cd /workspace/${_REPO_NAME}/autogpt_platform &&
         for image in autogpt_platform-executor \
                       autogpt_platform-frontend \
                       autogpt_platform-market \
@@ -50,3 +45,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 substitutions:
   _YOUR_ENV_VAR: value
+  _REPO_NAME: "AutoGPT-neosec"
