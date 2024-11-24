@@ -8,7 +8,7 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "agpt-dev-terraform"
+    bucket = "vratant-test-prj_cloudbuild"
     prefix = "terraform/state"
   }
 

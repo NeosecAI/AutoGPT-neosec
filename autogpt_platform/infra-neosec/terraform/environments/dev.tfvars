@@ -1,13 +1,13 @@
-project_id      = "agpt-dev"
+project_id      = "vratant-test-prj"
 region          = "us-central1"
 zone            = "us-central1-a"
-network_name    = "dev-gke-network"
+network_name    = "dev-gke-netwok"
 subnet_name     = "dev-gke-subnet"
 subnet_cidr     = "10.0.0.0/24"
 cluster_name    = "dev-gke-cluster"
 node_count      = 3
 node_pool_name  = "dev-main-pool"
-machine_type    = "e2-highmem-4"
+machine_type    = "e2-standard-4"
 disk_size_gb    = 100
 static_ip_names = ["agpt-server-ip", "agpt-builder-ip", "agpt-ws-server-ip", "agpt-market-ip"]
 
@@ -125,7 +125,7 @@ standard_bucket_names = []
 bucket_admins = ["gcp-devops-agpt@agpt.co", "gcp-developers@agpt.co"]
 
 workload_identity_pools = {
-  "dev-pool" = {
+  "dev-pool-test" = {
     display_name = "Development Identity Pool"
     providers = {
       "github" = {
